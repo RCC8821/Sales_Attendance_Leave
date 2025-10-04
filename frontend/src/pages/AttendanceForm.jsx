@@ -477,7 +477,7 @@ const fetchAttendanceStatus = async (email) => {
         image: imageBase64,
       };
 
-      const response = await fetch("https://attendance-leave-project.onrender.com/api/attendance-Form", {
+      const response = await fetch("https://sales-attendance-leave.vercel.app/api/attendance-Form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -586,7 +586,7 @@ const fetchAttendanceStatus = async (email) => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <img src="rcc-logo.png" className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl mb-4 shadow-lg" alt="RCC Logo" />
+          <img src="vrn8.png" className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl mb-4 shadow-lg" alt="RCC Logo" />
           <h1 className="text-3xl font-bold text-white">Attendance Form</h1>
           <p className="text-white mt-2">Mark your attendance with ease</p>
         </div>
