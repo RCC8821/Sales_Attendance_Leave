@@ -85,7 +85,7 @@ function AttendanceForm() {
     const timestamp = `${day}/${month}/${year} ${hour}:${minute}:${second}`;
     console.log("Generated timestamp:", timestamp);
 
-    const url = `https://attendance-leave-project.onrender.com/api/attendance?email=${encodeURIComponent(email)}&date=${timestamp}`;
+    const url = `https://sales-attendance-leave.vercel.app/api/attendance?email=${encodeURIComponent(email)}&date=${timestamp}`;
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) {
       const errorText = await response.text();
@@ -120,7 +120,7 @@ function AttendanceForm() {
     const init = async () => {
       try {
         setIsDataLoading(true);
-        const res = await fetch("https://attendance-leave-project.onrender.com/api/DropdownUserData", {
+        const res = await fetch("https://sales-attendance-leave.vercel.app/api/DropdownUserData", {
           cache: 'no-store',
           priority: 'high'
         });

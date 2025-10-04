@@ -279,7 +279,7 @@ const Employees = () => {
     const fetchEmployees = async () => {
       try {
 
-        const response = await fetch("https://attendance-leave-project.onrender.com/api/getEmployees");
+        const response = await fetch("https://sales-attendance-leave.vercel.app/api/getEmployees");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

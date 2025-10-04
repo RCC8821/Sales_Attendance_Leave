@@ -49,7 +49,7 @@ const LeaveApplicationForm = () => {
     const fetchEmployeeData = async () => {
       setFetchLoading(true);
       try {
-        const response = await fetch("https://attendance-leave-project.onrender.com/api/DropdownUserData");
+        const response = await fetch("https://sales-attendance-leave.vercel.app/api/DropdownUserData");
         const data = await response.json();
 
         if (!response.ok || !data.success) {
@@ -168,7 +168,7 @@ console.log(formattedEmployees)
     setErrorMessage("");
 
     try {
-      const response = await fetch("https://attendance-leave-project.onrender.com/api/leave-form", {
+      const response = await fetch("https://sales-attendance-leave.vercel.app/api/leave-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
