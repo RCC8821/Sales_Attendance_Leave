@@ -73,6 +73,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+
+
+
 // Dropdown Users Data API
 app.get("/api/DropdownUserData", async (req, res) => {
   try {
@@ -165,6 +168,7 @@ app.get("/api/DropdownUserData", async (req, res) => {
   }
 });
 
+
 // Login endpoint
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
@@ -192,6 +196,8 @@ app.post("/api/login", async (req, res) => {
       ![
         "Admin",
         "Ravindra Singh",
+        "Lt Col Mayank Sharma (Retd)",
+        "Subhash Patidar",
       ].includes(userType)
     ) {
       return res.status(400).json({ error: "Invalid user type" });
@@ -240,6 +246,125 @@ async function uploadToCloudinary(base64Image, fileName) {
   }
 }
 
+// Attendance validation endpoint
+
+
+app.get("/api/attendance", async (req, res) => {
+  try {
+    const { email, date } = req.query;
+
+    // Parse input date (YYYY-MM-DD or DD/MM/YYYY)
+    let today;
+    if (!date) {
+      today = new Date();
+    } else if (date.includes('-')) {
+      // YYYY-MM-DD format
+      const [year, month, day] = date.split('-');
+      today = new Date(year, month - 1, day); // month is 0-based
+    } else if (date.includes('/')) {
+      // DD/MM/YYYY format
+      const [day, month, year] = date.split('/');
+      today = new Date(year, month - 1, day);
+    } else {
+      return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    if (isNaN(today.getTime())) {
+      return res.status(400).json({ error: "Invalid date format" });
+    }
+
+    // Normalize to IST and set to start of day
+    today = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    console.log("Parsed input date (today):", today, "Tomorrow:", tomorrow);
+
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Attendance!A:I",
+    });
+
+    const rows = response.data.values || [];
+    if (!rows.length) {
+      return res.status(404).json({ error: "No data found in Google Sheet" });
+    }
+
+    const headers = rows[0];
+    console.log("Sheet headers:", headers);
+
+    const emailIndex = headers.findIndex(
+      (header) => header && header.toLowerCase() === "email"
+    );
+    const timestampIndex = headers.findIndex(
+      (header) => header && header.toLowerCase() === "timestamp"
+    );
+    const entryTypeIndex = headers.findIndex(
+      (header) => header && header.toLowerCase() === "entrytype"
+    );
+    const siteIndex = headers.findIndex(
+      (header) => header && header.toLowerCase() === "site"
+    );
+
+    if (
+      emailIndex === -1 ||
+      timestampIndex === -1 ||
+      entryTypeIndex === -1 ||
+      siteIndex === -1
+    ) {
+      return res.status(400).json({
+        error: "Invalid sheet structure",
+        details: `Missing columns: ${emailIndex === -1 ? "Email, " : ""}${
+          timestampIndex === -1 ? "Timestamp, " : ""
+        }${entryTypeIndex === -1 ? "EntryType, " : ""}${
+          siteIndex === -1 ? "Site" : ""
+        }`,
+      });
+    }
+
+    let records = rows.slice(1).filter((row) => {
+      // Parse sheet Timestamp (DD/MM/YYYY HH:MM:SS)
+      const timestampStr = row[timestampIndex];
+      if (!timestampStr) return false;
+
+      const [datePart] = timestampStr.split(" "); // Get date part only
+      const [day, month, year] = datePart.split("/");
+      const recordDate = new Date(year, month - 1, day); // Ignore time
+      if (isNaN(recordDate.getTime())) return false;
+
+      // Normalize to IST
+      const recordDateIST = new Date(recordDate.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      recordDateIST.setHours(0, 0, 0, 0);
+
+      console.log("Raw timestamp:", timestampStr, "Parsed date (IST):", recordDateIST);
+
+      return (
+        recordDateIST.getTime() === today.getTime() &&
+        (!email || row[emailIndex].toLowerCase() === email.toLowerCase())
+      );
+    });
+
+    const formattedRecords = records.map((row) => {
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header] = row[index] || "";
+      });
+      return record;
+    });
+
+    res.status(200).json(formattedRecords);
+  } catch (error) {
+    console.error(
+      "Error fetching attendance records:",
+      error.message,
+      error.stack
+    );
+    res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
+  }
+});
 
 
 // Attendance form submission endpoint
