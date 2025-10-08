@@ -49,7 +49,7 @@ const LeaveApplicationForm = () => {
     const fetchEmployeeData = async () => {
       setFetchLoading(true);
       try {
-        const response = await fetch("https://sales-attendance-leave.vercel.app/api/DropdownUserData");
+        const response = await fetch("https://dimension-attendance-leave-system.vercel.app/api/DropdownUserData");
         const data = await response.json();
 
         if (!response.ok || !data.success) {
@@ -168,7 +168,7 @@ console.log(formattedEmployees)
     setErrorMessage("");
 
     try {
-      const response = await fetch("https://sales-attendance-leave.vercel.app/api/leave-form", {
+      const response = await fetch("https://dimension-attendance-leave-system.vercel.app/api/leave-form", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -245,7 +245,7 @@ console.log(formattedEmployees)
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-t-2xl p-6 text-center text-white">
           <div className="flex items-center justify-center gap-3 mb-2">
             <img
-              src="vrn8.png" // Ensure the path is correct
+              src="/rcc-logo.png" // Ensure the path is correct
               className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl mb-4 shadow-lg"
               alt="RCC Logo"
             />
