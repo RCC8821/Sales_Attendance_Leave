@@ -16,10 +16,13 @@ const LeaveData = () => {
   useEffect(() => {
     const fetchLeaveData = async () => {
       try {
-        const response = await fetch("https://dimension-attendance-leave-system.vercel.app/api/getFormData", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+        const response = await fetch(
+          "https://sales-attendance-leave.vercel.app/api/getFormData",
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         const result = await response.json();
 
         if (result.data && Array.isArray(result.data)) {
@@ -27,7 +30,7 @@ const LeaveData = () => {
           // Normalize API data to match table field names
           const normalizedData = result.data.map((entry) => ({
             UID: entry.UID || "N/A",
-            SubmissionDate: entry.Timestamp || "N/A",
+            Timestamp: entry.Timestamp || "N/A",
             name: entry.NAME || "N/A",
             empcode: entry.EMPCODE || "N/A",
             department: entry.DEPARTMENT || "N/A",
@@ -40,9 +43,12 @@ const LeaveData = () => {
             approvalManager: entry.APPROVALMANAGER || "N/A",
           }));
           // Filter data for non-Admin users
-          const filteredData = isManager === "Admin"
-            ? normalizedData
-            : normalizedData.filter((entry) => entry.approvalManager === isManager);
+          const filteredData =
+            isManager === "Admin"
+              ? normalizedData
+              : normalizedData.filter(
+                  (entry) => entry.approvalManager === isManager
+                );
           console.log("Normalized and filtered leaveData:", filteredData);
           setLeaveData(filteredData);
         } else {
@@ -71,7 +77,10 @@ const LeaveData = () => {
       alert("Please select Approve or Reject");
       return;
     }
-    if (status === "Approved" && (!approvedDays || isNaN(approvedDays) || approvedDays <= 0)) {
+    if (
+      status === "Approved" &&
+      (!approvedDays || isNaN(approvedDays) || approvedDays <= 0)
+    ) {
       alert("Please enter a valid number of approved days (greater than 0)");
       return;
     }
@@ -97,11 +106,14 @@ const LeaveData = () => {
 
       console.log("Sending payload to API:", payload);
 
-      const response = await fetch("https://dimension-attendance-leave-system.vercel.app/api/Approve-leave", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "https://sales-attendance-leave.vercel.app/api/Approve-leave",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -182,18 +194,43 @@ const LeaveData = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {leaveData.map((entry, index) => (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.UID}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.SubmissionDate}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.empcode}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.department}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.fromDate}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.toDate}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.shift}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.typeOfLeave}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900 max-w-[200px] truncate">{entry.reason}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.days}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.approvalManager}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.UID}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.Timestamp}
+                    </td>{" "}
+                    {/* Fixed here */}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.empcode}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.department}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.fromDate}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.toDate}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.shift}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.typeOfLeave}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900 max-w-[200px] truncate">
+                      {entry.reason}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.days}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {entry.approvalManager}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => handleActionClick(entry)}
@@ -212,7 +249,9 @@ const LeaveData = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Leave Approval</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Leave Approval
+            </h3>
             <div className="space-y-4">
               <select
                 value={status}
