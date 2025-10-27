@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import { Edit } from "lucide-react";
 
@@ -79,9 +81,15 @@ const LeaveData = () => {
     }
     if (
       status === "Approved" &&
-      (!approvedDays || isNaN(approvedDays) || approvedDays <= 0)
+      (!approvedDays || isNaN(approvedDays) || parseFloat(approvedDays) <= 0)
     ) {
       alert("Please enter a valid number of approved days (greater than 0)");
+      return;
+    }
+
+    // Optional: Restrict approvedDays to increments of 0.5
+    if (status === "Approved" && parseFloat(approvedDays) % 0.5 !== 0) {
+      alert("Approved days must be in increments of 0.5 (e.g., 0.5, 1.0, 1.5)");
       return;
     }
 
@@ -96,7 +104,7 @@ const LeaveData = () => {
     try {
       const payload = {
         Approved: status,
-        leaveDays: status === "Approved" ? parseInt(approvedDays) : 0,
+        leaveDays: status === "Approved" ? parseFloat(approvedDays) : 0, // Use parseFloat to allow decimals
         UID: selectedEntry.UID || "",
       };
 
@@ -199,8 +207,7 @@ const LeaveData = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {entry.Timestamp}
-                    </td>{" "}
-                    {/* Fixed here */}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {entry.name}
                     </td>
@@ -270,7 +277,8 @@ const LeaveData = () => {
                   onChange={(e) => setApprovedDays(e.target.value)}
                   placeholder="Number of Approved Days"
                   className="w-full px-3 py-2 border border-gray-300 rounded"
-                  min="1"
+                  min="0.5" // Minimum value of 0.5
+                  step="0.1" // Allow decimal inputs
                   disabled={isLoading}
                 />
               )}
