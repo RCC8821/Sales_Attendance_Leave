@@ -947,6 +947,9 @@
 
 
 
+
+
+
 import { useState, useEffect, useRef } from "react";
 import { Camera, MapPin, Clock, User, Mail, Building, CheckCircle, XCircle, Loader2 } from "lucide-react";
 
@@ -1267,8 +1270,7 @@ function AttendanceForm() {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
-
-  const handleGetNearbyOffices = () => {
+const handleGetNearbyOffices = () => {
   setLocationLoading(true);
 
   if (navigator.geolocation) {
@@ -1278,29 +1280,28 @@ function AttendanceForm() {
         const userLng = position.coords.longitude;
         console.log("Current location:", userLat, userLng);
 
-        // Nearest offices find karo (300m ke andar)
-        const filteredOffices = offices.filter(
+        // हमेशा coordinates तैयार रखें
+        const coordinates = `${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
+
+        // 300 मीटर के अंदर कोई office है या नहीं?
+        const nearbyOffices = offices.filter(
           (office) => calculateDistance(userLat, userLng, office.lat, office.lng) <= 300
         );
 
-        if (filteredOffices.length > 0) {
-          // Agar office mil gaya to names join karke daalo
-          const nearbyOfficeNames = filteredOffices.map((office) => office.name).join(", ");
-          setNearbyOffices(filteredOffices);
-
+        if (nearbyOffices.length > 0) {
+          // अगर पास में office है → office names दिखाओ
+          const nearbyOfficeNames = nearbyOffices.map((office) => office.name).join(", ");
+          setNearbyOffices(nearbyOffices);
           setFormData((prev) => ({
             ...prev,
             locationName: nearbyOfficeNames,
           }));
         } else {
-          // Agar koi office nahi mila to coordinates daalo
-          const coordinates = `${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
-          
-          setNearbyOffices([]); // optional
-
+          // अगर कोई office पास में नहीं → हमेशा coordinates दिखाओ
+          setNearbyOffices([]);
           setFormData((prev) => ({
             ...prev,
-            locationName: coordinates, // Yahi sheet mein jayega
+            locationName: coordinates,
           }));
         }
 
@@ -1309,7 +1310,6 @@ function AttendanceForm() {
       (error) => {
         console.error("Error fetching location:", error.message);
         setErrorMessage("Unable to fetch your location. Please enable geolocation.");
-        
         setFormData((prev) => ({
           ...prev,
           locationName: "Location access denied",
@@ -1326,7 +1326,6 @@ function AttendanceForm() {
     setLocationLoading(false);
   }
 };
-
   const startCamera = async () => {
     setIsCameraOpen(true);
     setCapturedImage(null);
