@@ -1269,45 +1269,63 @@ function AttendanceForm() {
   };
 
   const handleGetNearbyOffices = () => {
-    setLocationLoading(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-          console.log("Current location:", userLat, userLng);
+  setLocationLoading(true);
 
-          const filteredOffices = offices.filter(
-            (office) => calculateDistance(userLat, userLng, office.lat, office.lng) <= 300
-          );
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        console.log("Current location:", userLat, userLng);
+
+        // Nearest offices find karo (300m ke andar)
+        const filteredOffices = offices.filter(
+          (office) => calculateDistance(userLat, userLng, office.lat, office.lng) <= 300
+        );
+
+        if (filteredOffices.length > 0) {
+          // Agar office mil gaya to names join karke daalo
+          const nearbyOfficeNames = filteredOffices.map((office) => office.name).join(", ");
           setNearbyOffices(filteredOffices);
 
-          const nearbyOfficeNames = filteredOffices.map((office) => office.name).join(", ");
           setFormData((prev) => ({
             ...prev,
-            locationName: nearbyOfficeNames || "No offices within 300m",
+            locationName: nearbyOfficeNames,
           }));
-          setLocationLoading(false);
-        },
-        (error) => {
-          console.error("Error fetching location:", error.message);
-          setErrorMessage("Unable to fetch your location. Please enable geolocation.");
+        } else {
+          // Agar koi office nahi mila to coordinates daalo
+          const coordinates = `${userLat.toFixed(6)}, ${userLng.toFixed(6)}`;
+          
+          setNearbyOffices([]); // optional
+
           setFormData((prev) => ({
             ...prev,
-            locationName: "Location access denied",
+            locationName: coordinates, // Yahi sheet mein jayega
           }));
-          setLocationLoading(false);
         }
-      );
-    } else {
-      setErrorMessage("Geolocation is not supported by this browser.");
-      setFormData((prev) => ({
-        ...prev,
-        locationName: "Geolocation not supported",
-      }));
-      setLocationLoading(false);
-    }
-  };
+
+        setLocationLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching location:", error.message);
+        setErrorMessage("Unable to fetch your location. Please enable geolocation.");
+        
+        setFormData((prev) => ({
+          ...prev,
+          locationName: "Location access denied",
+        }));
+        setLocationLoading(false);
+      }
+    );
+  } else {
+    setErrorMessage("Geolocation is not supported by this browser.");
+    setFormData((prev) => ({
+      ...prev,
+      locationName: "Geolocation not supported",
+    }));
+    setLocationLoading(false);
+  }
+};
 
   const startCamera = async () => {
     setIsCameraOpen(true);
