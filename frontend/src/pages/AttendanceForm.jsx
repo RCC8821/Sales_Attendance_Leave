@@ -2503,7 +2503,7 @@ function AttendanceForm() {
                 <button
                   onClick={handleGetNearbyOffices}
                   disabled={locationLoading}
-                  className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 disabled:opacity-50"
+                  className="w-full py-3 bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center space-x-2 disabled:opacity-50"
                 >
                   {locationLoading ? (
                     <>
@@ -2528,7 +2528,7 @@ function AttendanceForm() {
                 {!isCameraOpen && !capturedImage && (
                   <button
                     onClick={startCamera}
-                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl flex items-center justify-center space-x-2"
+                    className="w-full py-3 bg-green-900 text-white font-semibold rounded-xl flex items-center justify-center space-x-2"
                   >
                     <Camera className="w-5 h-5" />
                     <span>Open Camera</span>
@@ -2540,11 +2540,11 @@ function AttendanceForm() {
                       <video ref={videoRef} className="w-full h-64 object-cover" playsInline />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      <button onClick={takePhoto} className="py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl flex items-center justify-center space-x-2">
+                      <button onClick={takePhoto} className="py-3 bg-blue-400 from-green-500 to-emerald-600 text-white rounded-xl flex items-center justify-center space-x-2">
                         <Camera className="w-4 h-4" />
                         <span>Take Photo</span>
                       </button>
-                      <button onClick={stopCamera} className="py-3 bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-xl flex items-center justify-center space-x-2">
+                      <button onClick={stopCamera} className="py-3 bg-amber-700 from-red-500 to-rose-600 text-white rounded-xl flex items-center justify-center space-x-2">
                         <XCircle className="w-4 h-4" />
                         <span>Cancel</span>
                       </button>
@@ -2576,7 +2576,7 @@ function AttendanceForm() {
                   className={`w-full py-4 font-semibold rounded-xl shadow-lg flex items-center justify-center space-x-2 ${
                     isSubmitting
                       ? "bg-indigo-400 text-white"
-                      : "bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 transform hover:scale-105"
+                      : "bg-green-500 from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 transform hover:scale-105"
                   }`}
                 >
                   {isSubmitting ? (

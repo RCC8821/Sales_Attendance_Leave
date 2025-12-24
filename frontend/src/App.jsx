@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/attendanceForm' element={<AttendanceForm/>}/>
+        <Route path='/AttendanceForm' element={<AttendanceForm/>}/>
         <Route path='/leaveApplicationForm' element={<LeaveApplicationForm/>}/>
       </Routes>
     </Router>
