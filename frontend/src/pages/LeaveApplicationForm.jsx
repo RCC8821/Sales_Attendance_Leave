@@ -541,7 +541,7 @@ const LeaveApplicationForm = () => {
               <button
                 type="submit"
                 disabled={loading || fetchLoading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
+                className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:from-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all"
               >
                 {loading ? (
                   <>

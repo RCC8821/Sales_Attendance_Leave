@@ -136,7 +136,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
+            className="w-full bg-green-700 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
           >
             {loading ? (
               <>
@@ -154,7 +154,7 @@ const Login = () => {
           <button
             type="button"
             onClick={handleFormFill}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-500 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2 mt-4"
+            className="w-full bg-blue-500 hover:from-purple-600 hover:to-pink-500 text-black font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2 mt-4"
           >
             <span>Attendance Form</span>
             <ArrowRight className="w-5 h-5" />
@@ -163,7 +163,7 @@ const Login = () => {
           <button
             type="button"
             onClick={handleLeaveForm}
-            className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2 mt-4"
+            className="w-full bg-amber-700 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2 mt-4"
           >
             <span>Leave Form</span>
             <ArrowRight className="w-5 h-5" />
